@@ -7,6 +7,7 @@ const passport = require('passport')
 const session = require('express-session')
 const connectDB = require('./config/db')
 const homepage = require('./routes/homepage')
+const auth = require('./routes/auth')
 //import { login, home, register, products, sales, receipts, suppliers } from './routes';
 
 //load config 
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //Routes
 app.use(homepage)
+app.use(auth)
 
 const PORT = process.env.PORT || 5000
 
