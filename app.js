@@ -1,13 +1,17 @@
 const path = require('path')
 const express = require ('express')
+const mongoose = require('mongoose')
 const dotenv = require ('dotenv')
 const morgan = require ('morgan')
 const exphbs = require('express-handlebars')
 const passport = require('passport')
 const session = require('express-session')
+const Mongostore = require('connect-mongo')
 const connectDB = require('./config/db')
 const homepage = require('./routes/homepage')
 const auth = require('./routes/auth')
+const stories = require('./routes/stories')
+
 //import { login, home, register, products, sales, receipts, suppliers } from './routes';
 
 //load config 
@@ -34,7 +38,10 @@ app.set('view engine', '.hbs');
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: Mongostore.create({
+        mongoUrl: process.env.MONGO_URI
+    })
 }))
 
 //Passport Middleware
@@ -47,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 //Routes
 app.use(homepage)
 app.use(auth)
+app.use(stories)
 
 const PORT = process.env.PORT || 5000
 
